@@ -22,9 +22,10 @@
 using ExitGames.Concurrency.Fibers;
 using UnityEngine;
 using UnityEngine.UI;
+
 // ReSharper disable InconsistentNaming
 
-namespace Assets.Scripts.Photon
+namespace Assets.Scripts.Demo
 {
     /// <summary>
     /// 类型：类

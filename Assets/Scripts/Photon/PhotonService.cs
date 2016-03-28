@@ -19,8 +19,11 @@
 //
 //----------------------------------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+using C2SProtocol.Common;
 using ExitGames.Client.Photon;
 using ExitGames.Concurrency.Fibers;
+using Protocol;
 
 // ReSharper disable InconsistentNaming
 
@@ -46,7 +49,7 @@ namespace Assets.Scripts.Photon
 
         // 存放 Debug 信息
         public string DebugMessage { protected set; get; }
-        
+
         // 服务器 IP
         public string ServerIP { protected set; get; }
 
@@ -150,7 +153,7 @@ namespace Assets.Scripts.Photon
         /// </summary>
         /// <param name="operationResponse"></param>
         public virtual void OnOperationResponse(OperationResponse operationResponse)
-        {                                  
+        {
         }
 
         /// <summary>
@@ -177,11 +180,11 @@ namespace Assets.Scripts.Photon
         {
             switch (statusCode)
             {
-                case StatusCode.Connect:            // 连接
+                case StatusCode.Connect: // 连接
                     ServerConnected = true;
                     break;
 
-                case StatusCode.Disconnect:         // 断线
+                case StatusCode.Disconnect: // 断线
                     ServerConnected = false;
                     Peer = null;
                     break;
@@ -227,7 +230,70 @@ namespace Assets.Scripts.Photon
         /// 编写日期：2016/3/26
         /// </summary>
         protected virtual void Release()
-        {          
+        {
+        }
+
+        /// <summary>
+        /// 类型：方法
+        /// 名称：SendRequest
+        /// 作者：taixihuase
+        /// 作用：通过 OperationRequest 实例向服务器发送请求
+        /// 编写日期：2016/3/28
+        /// </summary>
+        /// <param name="operationRequest"></param>
+        /// <param name="reliable"></param>
+        public virtual void SendRequest(OperationRequest operationRequest, bool reliable = true)
+        {
+            if (Peer != null)
+            {
+                Peer.OpCustom(operationRequest.OperationCode, operationRequest.Parameters, reliable);
+            }
+        }
+
+        /// <summary>
+        /// 类型：方法
+        /// 名称：SendRequest
+        /// 作者：taixihuase
+        /// 作用：通过操作码、数据字典向服务器发送请求
+        /// 编写日期：2016/3/28
+        /// </summary>
+        /// <param name="opCode"></param>
+        /// <param name="obj"></param>
+        /// <param name="reliable"></param>
+        public virtual void SendRequest(C2SOpCode opCode, Dictionary<byte, object> obj = null,
+            bool reliable = true)
+        {
+            var request = new OperationRequest
+            {
+                OperationCode = (byte) opCode,
+                Parameters = obj
+            };
+            SendRequest(request, reliable);
+        }
+
+        /// <summary>
+        /// 类型：方法
+        /// 名称：SendRequest
+        /// 作者：taixihuase
+        /// 作用：通过操作码、参数码、数据对象向服务器发送请求
+        /// 编写日期：2016/3/28
+        /// </summary>
+        /// <param name="opCode"></param>
+        /// <param name="paraCode"></param>
+        /// <param name="obj"></param>
+        /// <param name="reliable"></param>
+        public virtual void SendRequest(C2SOpCode opCode, C2SParaCode ?paraCode, object obj = null,
+            bool reliable = true)
+        {
+            Dictionary<byte, object> para = null;
+            if (paraCode.HasValue && obj != null)
+            {
+                para = new Dictionary<byte, object>
+                {
+                    {(byte) paraCode, Serialization.IsNeed(obj) ? Serialization.Serialize(obj) : obj}
+                };
+            }
+            SendRequest(opCode, para, reliable);
         }
     }
 }
