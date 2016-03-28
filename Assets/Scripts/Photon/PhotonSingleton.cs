@@ -19,6 +19,7 @@
 //
 //----------------------------------------------------------------------------------------------------------
 
+using Assets.Scripts.Components;
 using C2SProtocol.Common;
 using ExitGames.Client.Photon;
 using ExitGames.Concurrency.Fibers;
@@ -101,6 +102,7 @@ namespace Assets.Scripts.Photon
         void Start () {
             Service.SetConnection(ServerSettings.Default.IpOfLoginServer, ServerSettings.Default.PortOfLoginServer, ConnectionProtocol.Tcp, ServerSettings.Default.NameOfLoginServer);
             Fiber.Enqueue(TryConnect);
+            SceneManager.Instance.Test();
         }
 	
         // Update is called once per frame
