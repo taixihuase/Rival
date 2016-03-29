@@ -19,11 +19,11 @@
 //
 //----------------------------------------------------------------------------------------------------------
 
-using Assets.Scripts.Components;
 using C2SProtocol.Common;
 using ExitGames.Client.Photon;
 using ExitGames.Concurrency.Fibers;
 using UnityEngine;
+
 // ReSharper disable UnusedMember.Local
 
 namespace Assets.Scripts.Photon
