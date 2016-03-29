@@ -22,6 +22,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using Protocol;
+using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts.Components
 {
@@ -142,13 +143,13 @@ namespace Assets.Scripts.Components
 
         /// <summary>
         /// 类型：方法
-        /// 名称：LoadScene
+        /// 名称：ToScene
         /// 作者：taixihuase
         /// 作用：直接加载场景
         /// 编写日期：2016/3/28
         /// </summary>
         /// <param name="scene"></param>
-        public void LoadScene(SceneCode scene)
+        public void ToScene(SceneCode scene)
         {
             Push(scene);
             UnityEngine.SceneManagement.SceneManager.LoadScene(scene.GetDescription());
@@ -156,47 +157,70 @@ namespace Assets.Scripts.Components
 
         /// <summary>
         /// 类型：方法
-        /// 名称：LoadScene
+        /// 名称：ToScene
         /// 作者：taixihuase
         /// 作用：通过场景名直接加载场景
         /// 编写日期：2016/3/28
         /// </summary>
         /// <param name="scene"></param>
-        public void LoadScene(string scene)
+        public void ToScene(string scene)
         {
-            LoadScene(EnumTool.GetEnum<SceneCode>(scene));
+            ToScene(EnumTool.GetEnum<SceneCode>(scene));
         }
 
         /// <summary>
         /// 类型：方法
-        /// 名称：LoadSceneAsync
+        /// 名称：ToSceneAsync
         /// 作者：taixihuase
         /// 作用：异步加载场景
         /// 编写日期：2016/3/28
         /// </summary>
         /// <param name="scene"></param>
-        public void LoadSceneAsync(SceneCode scene)
+        public void ToSceneAsync(SceneCode scene)
         {
             Push(scene);
-            UnityEngine.SceneManagement.SceneManager.LoadScene(SceneCode.Loading.GetDescription());
+            UnityEngine.SceneManagement.SceneManager.LoadScene(SceneCode.Loading.GetDescription(),
+                LoadSceneMode.Additive);
         }
 
         /// <summary>
         /// 类型：方法
-        /// 名称：LoadSceneAsync
+        /// 名称：ToSceneAsync
         /// 作者：taixihuase
         /// 作用：通过场景名异步加载场景
         /// 编写日期：2016/3/28
         /// </summary>
         /// <param name="scene"></param>
-        public void LoadSceneAsync(string scene)
+        public void ToSceneAsync(string scene)
         {
-            LoadSceneAsync(EnumTool.GetEnum<SceneCode>(scene));
+            ToSceneAsync(EnumTool.GetEnum<SceneCode>(scene));
         }
 
-        public void Test()
+        /// <summary>
+        /// 类型：方法
+        /// 名称：BackScene
+        /// 作者：taixihuase
+        /// 作用：直接返回上一场景
+        /// 编写日期：2016/3/29
+        /// </summary>
+        public void BackScene()
         {
+            Pop();
+            UnityEngine.SceneManagement.SceneManager.LoadScene(Peek().GetDescription());
+        }
 
+        /// <summary>
+        /// 类型：方法
+        /// 名称：BackSceneAsync
+        /// 作者：taixihuase
+        /// 作用：异步返回上一场景
+        /// 编写日期：2016/3/29
+        /// </summary>
+        public void BackSceneAsync()
+        {
+            Pop();
+            UnityEngine.SceneManagement.SceneManager.LoadScene(SceneCode.Loading.GetDescription(),
+                LoadSceneMode.Additive);
         }
     }
 }

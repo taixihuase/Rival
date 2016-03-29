@@ -43,7 +43,7 @@ namespace Assets.Scripts.Demo
         /// <param name="scene"></param>
         public void OnClick(string scene)
         {
-            SceneManager.Instance.LoadSceneAsync(scene);
+            SceneManager.Instance.ToSceneAsync(scene);
         }
     }
 }
